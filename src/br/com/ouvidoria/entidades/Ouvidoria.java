@@ -2,78 +2,83 @@ package br.com.ouvidoria.entidades;
 
 import java.util.ArrayList;
 
-import br.com.ouvidoria.entidades.Manifestacao.SituacaoManifesto;
+import br.com.ouvidoria.entidades.Manifestacao.SituacaoManifestacao;
 
 public class Ouvidoria {
 
-	private ArrayList<Manifestacao> listaManifestacoes = new ArrayList<Manifestacao>();
+    private ArrayList<Manifestacao> listaManifestacoes = new ArrayList<Manifestacao>();
 
-	public ArrayList<Manifestacao> obterListaReclamacao() {
-		return listaManifestacoes;
-	}
+    private ArrayList<Manifestacao> listaReclamacoes = new ArrayList<Manifestacao>();
 
-	public void adicionarManifestacao(Manifestacao manifestacao) {
-		if (manifestacao != null) {
-			listaManifestacoes.add(manifestacao);
-		}
-	}
+    private ArrayList<Manifestacao> listaElogios = new ArrayList<Manifestacao>();
 
-	public boolean removerReclamcao(int codigo) {
-		boolean removido = false;
+    private ArrayList<Manifestacao> listaSugestoes = new ArrayList<Manifestacao>();
 
-		Manifestacao manifesto = pesquisarReclamcao(codigo);
+    public ArrayList<Manifestacao> obterListaManifestacao() {
+        return listaManifestacoes;
+    }
 
-		if (manifesto != null) {
-			listaManifestacoes.remove(manifesto);
-			removido = true;
-		}
+    public ArrayList<Manifestacao> obterListaReclamacoes() {
+        return listaReclamacoes;
+    }
 
-		return removido;
-	}
+    public ArrayList<Manifestacao> obterListaElogios() {
+        return listaElogios;
+    }
 
-	public Manifestacao pesquisarReclamcao(int codigo) {
-		Manifestacao manifestacao = null;
+    public ArrayList<Manifestacao> obterListaSugestoes() {
+        return listaSugestoes;
+    }
 
-		for (Manifestacao item : listaManifestacoes) {
-			if (item.getCodigo() == codigo) {
-				manifestacao = item;
-				break;
-			}
-		}
+    public void adicionarManifestacao(Manifestacao manifestacao) {
+        if (manifestacao != null && manifestacao.getTipoManifestacao() == Manifestacao.Tipo.RECLAMACAO) {
+            listaReclamacoes.add(manifestacao);
+        } else if (manifestacao != null && manifestacao.getTipoManifestacao() == Manifestacao.Tipo.SUGESTAO) {
+            listaSugestoes.add(manifestacao);
+        } else if (manifestacao != null && manifestacao.getTipoManifestacao() == Manifestacao.Tipo.ELOGIO) {
+            listaElogios.add(manifestacao);
+        }
 
-		return manifestacao;
-	}
+        listaManifestacoes.add(manifestacao);
 
-	public void alterarReclamcao(int codigo, String titulo, String descricao) {
-		Manifestacao manifesto = pesquisarReclamcao(codigo);
+    }
 
-		if (manifesto != null) {
-			manifesto.setTitulo(titulo);
-			manifesto.setDescricao(descricao);
-		}
-	}
+    public boolean removerManifestacaoPorCodigo(int codigo) {
+        boolean manifestacaoAchada = false;
+        Manifestacao manifestacaoPesquisa = pesquisarManifestacao(codigo);
+        if (manifestacaoPesquisa != null) {
+            listaManifestacoes.remove(manifestacaoPesquisa);
+            manifestacaoAchada = true;
+        }
+        return manifestacaoAchada;
+    }
 
-	public void alterarReclamcao(int codigo, String titulo) {
-		Manifestacao manifesto = pesquisarReclamcao(codigo);
-		if (manifesto != null) {
-			manifesto.setTitulo(titulo);
-		}
-	}
+    public Manifestacao pesquisarManifestacao(int codigo) {
+        Manifestacao manifestacao = null;
 
-	// Usando os valores de SituacaoManifesto para usar os possiveis
-	// valores para alterar a situacao
-	public void alterarSituacaoAtendimento(int codigo) {
-		Manifestacao manifesto = pesquisarReclamcao(codigo);
-		if (manifesto != null) {
-			manifesto.setSituacao(SituacaoManifesto.EM_ATENDIMENTO);
-		}
-	}
+        for (Manifestacao item : listaManifestacoes) {
+            if (item.getCodigo() == codigo) {
+                manifestacao = item;
+            }
+        }
 
-	public void alterarSituacaoFinalizado(int codigo) {
-		Manifestacao manifesto = pesquisarReclamcao(codigo);
-		if (manifesto != null) {
-			manifesto.setSituacao(SituacaoManifesto.FINALIZADO);
-		}
-	}
+        return manifestacao;
+    }
+
+    // Usando os valores de SituacaoManifesto para usar os possiveis
+    // valores para alterar a situacao
+    public void alterarSituacaoAtendimento(int codigo) {
+        Manifestacao manifestacao = pesquisarManifestacao(codigo);
+        if (manifestacao != null) {
+            manifestacao.setSituacao(SituacaoManifestacao.EM_ATENDIMENTO);
+        }
+    }
+
+    public void alterarSituacaoFinalizado(int codigo) {
+        Manifestacao manifestacao = pesquisarManifestacao(codigo);
+        if (manifestacao != null) {
+            manifestacao.setSituacao(SituacaoManifestacao.FINALIZADO);
+        }
+    }
 
 }
